@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ssh-mock.fullname" . }}
+  labels:
+    {{- include "ssh-mock.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "ssh-mock.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ssh-mock.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      initContainers:
+        - name: auth-key-setup
+          image: busybox
+          command:
+            - "cp"
+            - "/tmp/{{ .Values.ssh.username }}/.ssh/authorized_keys"
+            - "/home/{{ .Values.ssh.username }}/.ssh/"
+          volumeMounts:
+            - name: vol-cm-authorized-keys
+              mountPath: "/tmp/{{ .Values.ssh.username }}/.ssh"
+            - name: vol-authorized-keys
+              mountPath: "/home/{{ .Values.ssh.username }}/.ssh"
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image }}"
+          imagePullPolicy: Always
+          env:
+            - name: USERNAME
+              value: {{ .Values.ssh.username }}
+            - name: STORAGE_DIR
+              value: {{ .Values.ssh.storageDir }}
+          ports:
+            - name: ssh
+              containerPort: 22
+              protocol: TCP
+          volumeMounts:
+            - name: vol-cm-authorized-keys
+              mountPath: "/tmp/{{ .Values.ssh.username }}/.ssh"
+            - name: vol-authorized-keys
+              mountPath: "/home/{{ .Values.ssh.username }}/.ssh"
+      volumes:
+        - name: vol-cm-authorized-keys
+          configMap:
+            name: {{ include "ssh-mock.fullname" . }}-auth-keys
+        - name: vol-authorized-keys
+          emptyDir: {}

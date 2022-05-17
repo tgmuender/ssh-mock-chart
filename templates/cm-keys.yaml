@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "ssh-mock.fullname" . }}-auth-keys
+data:
+  authorized_keys: |
+    {{- range $item := $.Values.ssh.authorizedKeys }}
+      {{- $item | nindent 4 -}}
+    {{- end }}

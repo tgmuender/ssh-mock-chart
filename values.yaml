@@ -1,0 +1,12 @@
+# Sample values file for ssh-mock.
+
+image: "ssh-mock:latest"
+
+ssh:
+  username: somebody
+  storageDir: /storage
+
+  authorizedKeys:
+    - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDQVVR6CSH7EoIxnftOlpHe83LK+aTfTts0Xe9OUIdtrxjZGdQT+itUlI+icoLAzobgggoTIMmS8kXjus/leA9vKJgpLLRfzyp0ILgvOPARZYGMWrhXcUnElal3/fijzzfuhb4xVxKHvWEFgSSIp2HGs6d8rM8rcQ7qTPDRIW+jrd947Y66dKoxe78N8kgt1M/J8JIy+9g1AhWHJskWxaZX0QgI2TF3115gMAWXv4SjaTpjsQj1CJSajMay3kaPIwMveQ3zPyuTXCEYAYGRgmh1htavS7h19EgzpGNpUVzjqgavaUDLGSTpnbbdD4yOJ3YsGArQzn9gKpA4xj7PR1aAzAoDISsnYnoqz9TObMTemTZzH44VreV0/A3vvWGj1ub74rRLZJCfm2944tIWhgd3fu1wkEYhZcuyXAqcMVM0HXR3HHfOyNIjwyYTf39c6Ksh8LUmr/oVULZySXYtayne3QvpKls8fCWaTWlA16dU2owodQ9bRSB7gW24UyOxFRs= ssh-mock"
+
+imagePullSecrets: []
